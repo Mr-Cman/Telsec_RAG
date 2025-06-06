@@ -1,11 +1,13 @@
 import argparse
 import os
 import shutil
-from langchain.document_loaders.pdf import PyPDFDirectoryLoader
+from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
+from langchain_community.document_loaders import Docx2txtLoader, UnstructuredWordDocumentLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 from get_embedding_function import get_embedding_function
-from langchain.vectorstores.chroma import Chroma
+from langchain_chroma import Chroma
+import glob
 
 
 CHROMA_PATH = "chroma"
@@ -29,14 +31,36 @@ def main():
 
 
 def load_documents():
-    document_loader = PyPDFDirectoryLoader(DATA_PATH)
-    return document_loader.load()
+    documents = []
+    
+    # Load PDF files
+    pdf_loader = PyPDFDirectoryLoader(DATA_PATH)
+    pdf_documents = pdf_loader.load()
+    documents.extend(pdf_documents)
+    
+    # Load Word documents (.docx and .doc)
+    word_files = glob.glob(os.path.join(DATA_PATH, "*.docx")) + glob.glob(os.path.join(DATA_PATH, "*.doc"))
+    
+    for word_file in word_files:
+        try:
+            if word_file.endswith('.docx'):
+                loader = Docx2txtLoader(word_file)
+            else:  # .doc files
+                loader = UnstructuredWordDocumentLoader(word_file)
+            word_documents = loader.load()
+            documents.extend(word_documents)
+            print(f"✅ Loaded: {os.path.basename(word_file)}")
+        except Exception as e:
+            print(f"❌ Error loading {word_file}: {e}")
+    
+    print(f"📚 Total documents loaded: {len(documents)}")
+    return documents
 
 
 def split_documents(documents: list[Document]):
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=800,
-        chunk_overlap=80,
+        chunk_overlap=160,
         length_function=len,
         is_separator_regex=False,
     )
@@ -67,7 +91,6 @@ def add_to_chroma(chunks: list[Document]):
         print(f"👉 Adding new documents: {len(new_chunks)}")
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         db.add_documents(new_chunks, ids=new_chunk_ids)
-        db.persist()
     else:
         print("✅ No new documents to add")
 
