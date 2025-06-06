@@ -57,6 +57,12 @@ o Reference external laws, legal precedents, or regulatory policies
 
 o Make assumptions about document applicability across tenant types or buildings
 
+CRITICAL RULE: If the question asks about ANY Information not explicitly contained in the provided context
+
+You MUST respond ONLY with: "I'm not certain based on the available documentation. Please consult the full lease file or contact the leasing team for further clarification."
+
+DO NOT provide any additional information after this response.
+
 Example Queries You Might Receive
 
 · “How is annual rent calculated in our standard retail lease?”
@@ -130,7 +136,7 @@ def query_rag(query_text: str):
     )
     # print(prompt)
 
-    model = OllamaLLM(model="llama3.2")
+    model = OllamaLLM(model="mistral")
     response_text = model.invoke(prompt)
 
     sources = [doc.metadata.get("id", None) for doc, _score in results]

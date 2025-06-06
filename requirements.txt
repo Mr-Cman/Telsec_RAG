@@ -1,6 +1,17 @@
+# Core RAG system dependencies
 pypdf
 langchain
 langchain-community
+langchain-chroma
+langchain-ollama
 chromadb # Vector storage
 pytest
 boto3
+
+# Web UI dependencies
+streamlit>=1.28.0
+plotly>=5.17.0
+pandas>=2.0.0
+
+# Optional but recommended for better performance
+watchdog  # For auto-reloading during development
