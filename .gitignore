@@ -1,6 +1,45 @@
+# Python
 *.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+venv/
+*.egg-info/
+
+# System files
 .DS_Store
-backup
-chroma
-/Telsec-RAG/data
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+thumbs.db
+
+# Project specific
+backup/
+chroma/
+
+# CONFIDENTIAL: Prevent sensitive documents from being committed
+data/
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.xls
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
 
