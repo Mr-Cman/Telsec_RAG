@@ -1,1 +1,2 @@
-# rag-tutorial-v2
+# A trial RAG system for Telsec
+
