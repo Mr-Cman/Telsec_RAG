@@ -15,3 +15,11 @@ pandas>=2.0.0
 
 # Optional but recommended for better performance
 watchdog  # For auto-reloading during development
+
+# Windows compatibility packages
+python-magic-bin>=0.4.14; sys_platform == "win32"  # Better file type detection on Windows
+colorama>=0.4.4; sys_platform == "win32"  # Colored terminal output on Windows
+
+# Document processing enhancement
+python-docx>=0.8.11  # Better .docx handling as fallback
+unstructured>=0.10.0  # Enhanced document parsing
